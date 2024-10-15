@@ -27,16 +27,27 @@
 //     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
 //     document.getElementById('deviceready').classList.add('ready');
 // }
-function afegirTasca() {
-    let task = prompt("Nova tasa:");
-    if (task == null || task == "") {
-        alert("Tasca buida");
-    } else {
-        // creem element jQuery
-        var newTaskElement = $("<li>" + task + "</li>");
-        // l'afegim a una llista de la nostra pàgina
-        $("ul#tasks").append(newTaskElement);
-    }
-}
 
-$('#btn_addTask').click(afegirTasca);
+$(document).ready(function () {
+    $("#dialog").dialog({
+        autoOpen: false,
+        modal: true,
+        buttons: {
+            "Afegir": function () {
+                var taskName = $("#taskName").val();
+                // creem element jQuery
+                var newTaskElement = $("<li>" + taskName + "</li>");
+                // l'afegim a una llista de la nostra pàgina
+                $("ul#tasks").append(newTaskElement);
+                $(this).dialog("close");
+            },
+            "Cancelar": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $("#btn_addTask").click(function () {
+        $("#dialog").dialog("open");
+    });
+});
