@@ -39,9 +39,11 @@ $(document).ready(function () {
                 var newTaskElement = $("<li>" + taskName + "</li>");
                 // l'afegim a una llista de la nostra pàgina
                 $("ul#tasks").append(newTaskElement);
+                $("#taskName").val("");
                 $(this).dialog("close");
             },
             "Cancelar": function () {
+                $("#taskName").val("");
                 $(this).dialog("close");
             }
         }
