@@ -28,6 +28,10 @@
 //     document.getElementById('deviceready').classList.add('ready');
 // }
 
+$(function () {
+    $("#accordion").accordion();
+});
+
 $(document).ready(function () {
     $("#dialog").dialog({
         autoOpen: false,
@@ -36,9 +40,11 @@ $(document).ready(function () {
             "Afegir": function () {
                 var taskName = $("#taskName").val();
                 // creem element jQuery
-                var newTaskElement = $("<li>" + taskName + "</li>");
+                var newTaskElement = $("<h3>" + taskName + "</h3>\n" +
+                    "<div>\n" + "</div>");
                 // l'afegim a una llista de la nostra pàgina
-                $("ul#tasks").append(newTaskElement);
+                $("#accordion").append(newTaskElement);
+                $("#accordion").accordion("refresh");
                 $("#taskName").val("");
                 $(this).dialog("close");
             },
