@@ -32,6 +32,42 @@ $(function () {
     $("#accordion").accordion();
 });
 
+function addTask() {
+    $("#dialog").dialog("open");
+}
+
+function removeTask() {
+    var taskDiv = $(this).parent();
+    var taskTitle = taskDiv.prev();
+    taskTitle.remove();
+    taskDiv.remove();
+    $("#accordion").accordion("refresh");
+}
+
+function editTaskOk() {
+    var newTaskElement = $("<h3>" + taskTitleText + "</h3>\n" +
+        "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
+        "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
+    // l'afegim a una llista de la nostra pàgina
+    $(".btn_EditTask", newTaskElement).click(editTask);
+    $(".btn_RemoveTask", newTaskElement).click(removeTask);
+    $("#accordion").append(newTaskElement);
+    $("#accordion").accordion("refresh");
+}
+
+function editTask() {
+    var taskDiv = $(this).parent();
+    var taskTitle = taskDiv.prev();
+    var taskTitleText = taskTitle.text();
+    var newInputText = $("<input type='text' class='taskEditInput' value='" + taskTitleText + "' />\n"
+        + "<button class='btn_EditTaskOk'>Ok</button>\n"
+    );
+    $(".btn_EditTaskOk", newInputText).click(editTaskOk);
+    taskDiv.empty();
+    taskDiv.append(newInputText);
+    $("#accordion").accordion("refresh");
+}
+
 $(document).ready(function () {
     $("#dialog").dialog({
         autoOpen: false,
@@ -41,11 +77,15 @@ $(document).ready(function () {
                 var taskName = $("#taskName").val();
                 // creem element jQuery
                 var newTaskElement = $("<h3>" + taskName + "</h3>\n" +
-                    "<div>\n" + "</div>");
+                    "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
+                    "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
                 // l'afegim a una llista de la nostra pàgina
+                $(".btn_EditTask", newTaskElement).click(editTask);
+                $(".btn_RemoveTask", newTaskElement).click(removeTask);
                 $("#accordion").append(newTaskElement);
                 $("#accordion").accordion("refresh");
                 $("#taskName").val("");
+
                 $(this).dialog("close");
             },
             "Cancelar": function () {
@@ -55,7 +95,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#btn_addTask").click(function () {
-        $("#dialog").dialog("open");
-    });
+    $("#btn_addTask").click(addTask);
+    $(".btn_EditTask").click(editTask);
+    $(".btn_RemoveTask").click(removeTask);
 });
