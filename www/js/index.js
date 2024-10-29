@@ -45,7 +45,16 @@ function removeTask() {
 }
 
 function editTaskOk() {
-    console.log("Hola, estoy en editTaskOk");
+    var taskInputVal = $(this).prev().val();
+    var taskDiv = $(this).parent();
+    var taskTitle = taskDiv.prev();
+    taskTitle.text(taskInputVal);
+    var newTaskElement = $("    <button class='btn_EditTask'>Edita</button>\n" +
+        "    <button class='btn_RemoveTask'>X</button>");
+    // l'afegim a una llista de la nostra pàgina
+    taskDiv.html(newTaskElement);
+    $(".btn_EditTask", taskDiv).click(editTask);
+    $(".btn_RemoveTask", taskDiv).click(removeTask);
 }
 
 function editTask() {
@@ -55,10 +64,8 @@ function editTask() {
     var newInputText = $("<input type='text' class='taskEditInput' value='" + taskTitleText + "' />\n"
         + "<button class='btn_EditTaskOk'>Ok</button>\n"
     );
-    $(".btn_EditTaskOk", newInputText).click(editTaskOk);
-    taskDiv.empty();
-    taskDiv.append(newInputText);
-    console.log("ediTask final");
+    taskDiv.html(newInputText);
+    $(".btn_EditTaskOk", taskDiv).click(editTaskOk);
 
 }
 
