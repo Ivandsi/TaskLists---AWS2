@@ -45,14 +45,7 @@ function removeTask() {
 }
 
 function editTaskOk() {
-    var newTaskElement = $("<h3>" + taskTitleText + "</h3>\n" +
-        "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
-        "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
-    // l'afegim a una llista de la nostra pàgina
-    $(".btn_EditTask", newTaskElement).click(editTask);
-    $(".btn_RemoveTask", newTaskElement).click(removeTask);
-    $("#accordion").append(newTaskElement);
-    $("#accordion").accordion("refresh");
+    console.log("Hola, estoy en editTaskOk");
 }
 
 function editTask() {
@@ -65,7 +58,8 @@ function editTask() {
     $(".btn_EditTaskOk", newInputText).click(editTaskOk);
     taskDiv.empty();
     taskDiv.append(newInputText);
-    $("#accordion").accordion("refresh");
+    console.log("ediTask final");
+
 }
 
 $(document).ready(function () {
@@ -98,4 +92,5 @@ $(document).ready(function () {
     $("#btn_addTask").click(addTask);
     $(".btn_EditTask").click(editTask);
     $(".btn_RemoveTask").click(removeTask);
+    $(".btn_EditTaskOk").click(editTaskOk);
 });
