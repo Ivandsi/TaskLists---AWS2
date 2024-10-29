@@ -55,6 +55,7 @@ function editTaskOk() {
     taskDiv.html(newTaskElement);
     $(".btn_EditTask", taskDiv).click(editTask);
     $(".btn_RemoveTask", taskDiv).click(removeTask);
+    $("#accordion").accordion("refresh");
 }
 
 function editTask() {
