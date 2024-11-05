@@ -32,6 +32,43 @@ $(function () {
     $("#accordion").accordion();
 });
 
+function addTaskToStorage(task) {
+    let tasks = getTasksFromStorage();
+    tasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function removeTaskFromStorage(task) {
+    if (task != "") {
+        let tasks = getTasksFromStorage();
+        let index = tasks.indexOf(task);
+        tasks.splice(index, 1);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+}
+
+function updateTaskFromStorage(originalTask, newTaskName) {
+    if (originalTask != "" && newTaskName != "") {
+        if (originalTask != newTaskName) {
+            let tasks = getTasksFromStorage();
+            let index = tasks.indexOf(originalTask);
+            tasks[index] = newTaskName;
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+    }
+}
+
+function getTasksFromStorage() {
+    let tasksString = localStorage.getItem("tasks");
+    let tasks;
+    if (tasksString == null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(tasksString);
+    }
+    return tasks;
+}
+
 function addTask() {
     $("#dialog").dialog("open");
 }
@@ -42,20 +79,32 @@ function removeTask() {
     taskTitle.remove();
     taskDiv.remove();
     $("#accordion").accordion("refresh");
+    removeTaskFromStorage(taskTitle.text());
 }
 
 function editTaskOk() {
     var taskInputVal = $(this).prev().val();
-    var taskDiv = $(this).parent();
-    var taskTitle = taskDiv.prev();
-    taskTitle.text(taskInputVal);
-    var newTaskElement = $("    <button class='btn_EditTask'>Edita</button>\n" +
-        "    <button class='btn_RemoveTask'>X</button>");
-    // l'afegim a una llista de la nostra pàgina
-    taskDiv.html(newTaskElement);
-    $(".btn_EditTask", taskDiv).click(editTask);
-    $(".btn_RemoveTask", taskDiv).click(removeTask);
-    $("#accordion").accordion("refresh");
+    if (taskInputVal != "") {
+        var taskDiv = $(this).parent();
+        var taskTitle = taskDiv.prev();
+        let originalTaskTitle = taskTitle.text();
+        let tasks = getTasksFromStorage();
+        if (!tasks.includes(taskInputVal) || taskInputVal == originalTaskTitle) {
+            taskTitle.text(taskInputVal);
+            var newTaskElement = $("    <button class='btn_EditTask'>Edita</button>\n" +
+                "    <button class='btn_RemoveTask'>X</button>");
+            // l'afegim a una llista de la nostra pàgina
+            taskDiv.html(newTaskElement);
+            $(".btn_EditTask", taskDiv).click(editTask);
+            $(".btn_RemoveTask", taskDiv).click(removeTask);
+            $("#accordion").accordion("refresh");
+            updateTaskFromStorage(originalTaskTitle, taskInputVal);
+        } else {
+            alert("La tasca ja existeix");
+        }
+    } else {
+        alert("Entra un nom de tasca");
+    }
 }
 
 function editTask() {
@@ -77,24 +126,45 @@ $(document).ready(function () {
         buttons: {
             "Afegir": function () {
                 var taskName = $("#taskName").val();
-                // creem element jQuery
-                var newTaskElement = $("<h3>" + taskName + "</h3>\n" +
-                    "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
-                    "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
-                // l'afegim a una llista de la nostra pàgina
-                $(".btn_EditTask", newTaskElement).click(editTask);
-                $(".btn_RemoveTask", newTaskElement).click(removeTask);
-                $("#accordion").append(newTaskElement);
-                $("#accordion").accordion("refresh");
-                $("#taskName").val("");
+                if (taskName != "") {
+                    if (!getTasksFromStorage().includes(taskName)) {
+                        // creem element jQuery
+                        var newTaskElement = $("<h3>" + taskName + "</h3>\n" +
+                            "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
+                            "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
 
-                $(this).dialog("close");
+                        // l'afegim a una llista de la nostra pàgina
+                        $(".btn_EditTask", newTaskElement).click(editTask);
+                        $(".btn_RemoveTask", newTaskElement).click(removeTask);
+                        $("#accordion").append(newTaskElement);
+                        $("#accordion").accordion("refresh");
+                        $("#taskName").val("");
+                        addTaskToStorage(taskName);
+
+                        $(this).dialog("close");
+                    } else {
+                        alert("La tasca ja existeix");
+                    }
+                } else {
+                    alert("Entra un nom de tasca");
+                }
             },
             "Cancelar": function () {
                 $("#taskName").val("");
                 $(this).dialog("close");
             }
         }
+    });
+
+    getTasksFromStorage().forEach(function (task) {
+        var newTaskElement = $("<h3>" + task + "</h3>\n" +
+            "<div>\n" + "    <button class='btn_EditTask'>Edita</button>\n" +
+            "    <button class='btn_RemoveTask'>X</button>\n" + "</div>");
+        // l'afegim a una llista de la nostra pàgina
+        $(".btn_EditTask", newTaskElement).click(editTask);
+        $(".btn_RemoveTask", newTaskElement).click(removeTask);
+        $("#accordion").append(newTaskElement);
+        $("#accordion").accordion("refresh");
     });
 
     $("#btn_addTask").click(addTask);
