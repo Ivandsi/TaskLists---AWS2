@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html lang="ca">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+    <script src="js/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"></script>
+    <script src="js/jquery-ui.js"></script>
     <title>PD2: Cordova app tasklist</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <nav>
-        <div class="nav-content">
-            <h1 class="nav-title">PD2: Cordova app tasklist</h1>
-            <button id="btn_addTask">Afegir tasca</button>
-        </div>
+      <div class="nav-content">
+        <h1 class="nav-title">PD2: Cordova app tasklist</h1>
+        <button id="btn_addTask">Afegir tasca</button>
+      </div>
     </nav>
-    <div id="accordion">
-    </div>
+    <div id="accordion"></div>
 
-
-    <div id="dialog" title="Afegir tasca" style="display:none;">
-        <p>Entra el nom de la tasca nova:</p>
-        <input type="text" id="taskName" />
+    <div id="dialog" title="Afegir tasca" style="display: none">
+      <p>Entra el nom de la tasca nova:</p>
+      <input type="text" id="taskName" />
     </div>
 
     <script type="text/javascript" src="js/index.js"></script>
-</body>
+  </body>
 
 </html>
